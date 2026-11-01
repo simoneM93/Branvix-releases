@@ -9,12 +9,12 @@ A Git client for Windows with visual branch management, commit history and graph
 
 ## Download
 
-Current release: **1.2.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.2.1**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.1) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.2.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.2.0/Branvix-Setup-1.2.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.2.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.2.0/Branvix-1.2.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.2.1.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.2.1/Branvix-Setup-1.2.1.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.2.1-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.2.1/Branvix-1.2.1-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
 
 ## Requirements
 
@@ -33,6 +33,10 @@ Branvix builds are currently unsigned. Windows may show a SmartScreen warning on
 4. Use **Sync**, **Push**, or the integrated PowerShell terminal for remote work.
 
 The interface supports Italian and English, light and dark themes, and saved workspace preferences. **Ctrl+K** opens the command palette; **Ctrl+Backquote** opens the terminal.
+
+Each workspace column scrolls independently, keeping its headers and controls visible. The detail panel's close button stays available while you scroll a diff. Changes keeps the commit controls reachable with the terminal open; the description editor adapts to the available height.
+
+Files inside new folders appear individually in Changes with their relative paths. You can inspect, stage, unstage or discard one file without affecting its siblings. Ignored files remain hidden, and nested Git repositories are not expanded into the parent repository's file list.
 
 ## Updates
 

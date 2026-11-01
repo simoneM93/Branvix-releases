@@ -7,6 +7,21 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.2.1] - 2026-11-01
+
+### Fixed
+
+- Keep column headers, tabs, filters and controls visible while their content scrolls independently. The detail panel's close button stays fixed for file, commit and stash diffs; long commit descriptions scroll with the content.
+- Keep the Changes toolbar and commit controls reachable with the terminal open, including narrow windows. The commit editor adapts to the available height, and the diff toolbar remains within its scroll region.
+- List individual untracked files inside new directories in Changes, including nested paths, instead of aggregating normal directories. Diff, staging, unstaging and discard operate on the selected file while preserving siblings, ignored files and nested Git repository boundaries.
+
+### Changed
+
+- Release workflow synchronizes the public user README, released changelog and license before publication, and uses the matching changelog section for release notes. Unreleased entries and private comparison links are excluded from public documentation.
+- Expand desktop smoke coverage for independent scrolling, new-directory file actions, small windows and keyboard navigation. Disable background timer throttling only during smoke tests and control pointer/focus state to keep native UI checks reproducible.
+
+---
+
 ## [1.2.0] - 2026-11-01
 
 ### Added
@@ -142,6 +157,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.2.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.1
 [1.2.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.0
 [1.1.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.1.0
 [1.0.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.0.0
