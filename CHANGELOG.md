@@ -7,6 +7,44 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.3.0] - 2026-11-06
+
+### Added
+
+- Open the active or a recent repository in the Code tab of Claude Desktop through the verified native Claude Code CLI, independently of IDE preferences. Windows x64/version requirements, bounded shell-free handoff, duplicate-launch guard and actionable Italian/English errors are included; Claude installation and account sign-in remain external.
+- Silent Windows notifications for background clone/network outcomes and available updates, with separate persistent category preferences in Italian/English Settings. Toast clicks restore Branvix, update versions are deduplicated across restarts, cancellations stay silent and payloads exclude repository/credential data. Windows policies and portable app identity may suppress delivery; in-app messages remain available.
+- Windows system tray with Open/Exit actions and an optional, persistent background mode. Closing the window can hide Branvix without stopping its terminal or managed work; explicit exit confirms when work is active. The setting is off by default, and update restart still performs a real exit.
+- Custom repository cloning over HTTPS and SSH for installer and portable builds. The shared in-app picker selects or creates a parent folder; standard GitHub/GitLab/Bitbucket URLs can switch protocol, while custom addresses remain untouched. Branch, shallow/single-branch and submodule options, Git progress/cancel, recent-repository registration and immediate app/IDE opening are available. Existing destinations are never overwritten, and uncertain partial data is preserved for inspection.
+
+- HTTPS authentication settings with bounded GCM discovery, safe helper/scope metadata, configured remote selection and read-only access/retry checks. Existing Git/GCM provider flows and valid credentials are reused; no token form, credential store or helper configuration rewrite is added.
+- Owned, cancellable HTTPS network jobs with translated authentication/access/TLS/network guidance and redacted provider errors, preserving local Git validation messages. HTTP, URL-carried credentials/parameters and disabled TLS verification are refused; Git/GCM tracing is suppressed during managed HTTPS operations. Source and packaged smoke cover settings, status, cancellation, retry, themes/languages and untrusted IPC using fixtures.
+- SSH identity inventory and repository/global preferences for existing Ed25519, RSA and ECDSA public-key pairs, matching OpenSSH agent status, custom identity selection and read-only SSH remote connection tests. Existing SSH config, aliases, Include, Match and agent configuration stay delegated to OpenSSH.
+- Graphical SSH passphrase prompts with protected input, show/hide, retry and cancellation. Per-operation authenticated local pipes deliver transient answers only to their owner; no passphrases are stored, logged or passed in command arguments. Unknown/changed host keys are refused and distinguished in guidance.
+- Smart IDE detection for Visual Studio, VS Code, Rider, WebStorm, IntelliJ IDEA and PyCharm, with bounded filename-only project detection, stable automatic selection, solution/project choice, repository/global preferences and a main-owned custom executable picker with restricted argument templates.
+- **Open with** toolbar/file/recent-repository actions and IDE configuration in Settings, including recovery from missing installations, preference reset and custom IDE removal. IDE dialogs and Settings keep their heading and close controls fixed while their content scrolls.
+- Git setup manager with a custom download/verification/install dialog, real percentage and downloaded MB, cancellation/retry, explicit native installation, post-install detection and an opt-in winget fallback. Direct downloads validate the official stable release, architecture, canonical URLs/redirects, bounded size, published SHA-256 and Windows Authenticode trust with a reviewed certificate; verification is repeated before execution.
+- Git executable discovery through a saved selection, PATH and standard directories. Settings shows version/path and lets users choose an existing git.exe, with validated atomic persistence and fallback when the file moves. Subsequent Git calls use the selected executable and new terminals inherit only the process-local PATH change.
+- Real installer download percentages in notifications, the update banner, status bar and Settings, with indeterminate feedback when the total is unknown. Progress keeps menu controls/focus stable and avoids repeated live-region announcements.
+
+### Changed
+
+- Clarify update instructions for tray/background mode: X defers installation while hiding, Exit allows normal-quit installation without forced reopening, and Restart bypasses background hiding. Add a native tray-exit regression smoke; real two-version installation acceptance remains pending.
+- Network Git commands use operation-local environment/cancellation and verified native Windows Job Object helpers. Cancel, timeout, renderer reload/crash, quit and update restart stop owned descendants. Plain absolute configured OpenSSH executables remain supported; arbitrary SSH commands and provider-specific prompts retain their external setup.
+- Missing-Git actions open the setup flow without installing automatically. App quit cancels download/verification and waits for an interactive installer already running; native setup cancellation remains in its own window. Setup IPC accepts no renderer-supplied executable paths, commands or download URLs.
+- Offer **Restart** when an installer update is downloaded and verified. Confirm before interrupting an active or hidden terminal, finish terminal cleanup before launching a visible NSIS update, and request automatic reopening when installation completes. Explicit updates skip the final Finish page; normal setup and silent installation on ordinary app quit retain their existing behavior. Portable replacement remains manual.
+- Cover update retries, launch/cleanup failures, concurrent actions, real NSIS command arguments and hidden-terminal restart cancellation; extend the isolated real-download check to verify progress. Update smoke targets follow the running app version so release bumps do not invalidate reload-receipt checks.
+
+### Fixed
+
+- Checking out a remote branch now selects its existing local branch instead of failing while trying to recreate it. Existing commits and upstream settings stay intact; a tracking branch is created only when no local counterpart exists.
+- Keep IDE project detection within the canonical repository root on Windows junctions, so external project files cannot enter the project selector.
+- Successful Electron smoke runs now use normal app shutdown and its asynchronous cleanup. Forced exit could emit a passing report yet leave the process alive until the launcher timed out.
+- Report native editor spawn failures instead of showing a successful open; confine IDE file/project targets to the real repository root, including junction checks. Editor launches keep separate arguments and avoid shell/file-association execution.
+- Start draining the bundled ConPTY output worker when terminating a terminal even if no further output arrives, preventing silent sessions from leaving shutdown waiting for the exit event. Apply a guarded local fix to node-pty 1.1.0 during dependency preparation.
+- Preserve the original terminal smoke error when cleanup also fails, identify the failing phase, and cover idle shutdown and delayed output with regression tests.
+
+---
+
 ## [1.2.1] - 2026-11-01
 
 ### Fixed
@@ -157,6 +195,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.3.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.3.0
 [1.2.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.1
 [1.2.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.0
 [1.1.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.1.0
