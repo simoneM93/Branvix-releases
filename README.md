@@ -9,12 +9,40 @@ A Git client for Windows with visual branch management, commit history and graph
 
 ## Download
 
-Current release: **1.3.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.3.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.4.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.4.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.3.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.3.0/Branvix-Setup-1.3.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.3.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.3.0/Branvix-1.3.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.4.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.4.0/Branvix-Setup-1.4.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.4.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.4.0/Branvix-1.4.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+
+## Repository overview and folder groups
+
+Open **Repositories** from the folder button in the top bar or the repository selector. The overview combines opened/cloned repositories and configured folder groups; adding or removing a group never changes folders on disk. Expand a group in the selector to open a nested repository. One repository remains active, and switching keeps the terminal confirmation.
+
+Use **Add folder** and **Scan repositories** to find repositories, including linked worktrees. Discovery does not follow symbolic links/junctions or enter `.git`. A scan is limited to 8 levels, 2,000 directories, 20,000 entries, 200 repositories and a cooperative 5-second budget; filesystem calls may take longer. A partial result is labeled: retry with a more specific folder. Missing folders/repositories remain recoverable through refresh.
+
+Search by name/path/branch, filter changed or unavailable repositories, and sort by name, latest commit time or last opened. The list shows 100 repositories per page to keep rendering bounded. Migrated recent entries have no historical opening timestamp. Local snapshots refresh every 15 seconds while the overview is visible, with at most four concurrent snapshots, 5-second Git timeouts and a 10-second cache. Ahead/behind describes local upstream references; **Refresh remote** explicitly fetches for the selected repository. There is no periodic network access.
+
+**Pull all** takes the currently scanned group as its target list and runs one `git pull --ff-only` at a time through the existing authentication flow. Dirty repositories are attempted; Git refuses incompatible changes or divergent history. Repositories without an upstream, with detached HEAD or an operation in progress are skipped with a reason. Errors do not stop the rest; **Cancel** stops the current owned process and remaining queue. Results are reported per repository. There is no automatic stash, reset, merge or push. A partial scan only pulls the repositories it found; scan a narrower folder to include omitted repositories.
+
+### Visual Git Blame
+
+Choose **View Blame** in a changed file or commit file's diff. The view attributes the full file snapshot: **Working tree content**, **Staged content**, or **Commit content**. Staged and working changes are kept separate; uncommitted lines have no commit hash, copy action or graph target. Untracked files show an explanation; staging a new file makes its uncommitted lines viewable. Git rename history is followed when identifiable.
+
+Select a row's attribution to inspect author, date, full hash and commit subject; the same metadata is available in its keyboard-accessible label and tooltip. **Copy full hash** and **Open in graph** use that selection. When the commit is outside the loaded history page, Branvix opens a focused ancestry graph of up to 300 commits; **Full history** restores the normal view. **Back to diff** preserves the original file/commit selection.
+
+Blame is read-only and local. It supports regular UTF-8 text files up to 2 MiB and 200,000 lines; binary files, symlinks, paths outside the repository and conflicted index entries are rejected. The viewport loads small ranges (normally 120 rows, at most 400 for very tall windows), with cancellable 10-second Git commands and a content-keyed cache bounded to 8 MiB/8 ranges for 30 seconds. **Cancel** stops the current request; **Refresh** rechecks the snapshot. Repository refreshes also reload an open blame view, and late results cannot replace a newer selection.
+
+### Repository files and read-only preview
+
+Select **Files** in the sidebar, or its icon on the collapsed rail, to browse the active repository. Expand folders on demand; Branches, tags, stash and Changes keep their existing flows. The tree includes tracked/untracked files, dotfiles and empty directories; `.git` metadata and Git-ignored entries are hidden. Force-tracked files remain visible under ignored folders. Nested repositories/submodules use their own Git ignore rules while filesystem access stays inside the active root. Links are shown but cannot be expanded or previewed.
+
+Folder badges summarize modified, untracked or conflicted descendants. Use arrow keys to move/expand/collapse, Home/End to reach the first/last visible row, and Enter/Space to open a file or load more entries. The Branches/Files tabs support Left/Right. **Refresh** reloads expanded folders; repository refreshes and returning to the app pick up external file changes. A repository switch cancels obsolete work and resets tree memory.
+
+Selecting a file opens a **Read-only preview** inside Branvix. Text is never interpreted as HTML or executed. **Back to diff** restores the preceding diff/blame selection (or Close when there was none); IDE and File Explorer actions remain explicit alternatives. The preview supports regular UTF-8 text up to 1 MiB and 20,000 lines; binary/invalid text, oversized files, ignored paths, metadata and external links receive clear messages. Refresh rechecks the file and Cancel stops the owned request. Browsing/preview never stages or writes repository files.
+
+Lists load 200 entries per page, with a 2,000-entry scan cap per directory and a cooperative 5-second filesystem budget. Git commands have a 5-second timeout and 8 MiB output bound; status is briefly cached per Git root (2 seconds). Partial lists and unavailable Git status are labeled. The current tree retains at most 50 expansions/4,000 cached entries and renders at most 2,000 rows; collapse folders to free capacity. The preview renders a small window (normally 120 rows, at most 400 on tall screens). Filesystem calls already in progress can exceed the cooperative budget.
 
 ## Requirements
 
@@ -86,7 +114,7 @@ Separate messages explain authentication, denied access, unavailable repositorie
 
 ## Updates
 
-Verification limit for 1.3.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition.
+Verification limit for 1.4.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
 
 Both distributions check for stable updates after startup and every four hours. You can also use **Settings → Updates → Check for updates**.
 

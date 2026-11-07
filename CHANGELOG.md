@@ -7,6 +7,26 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.4.0] - 2026-11-07
+
+### Added
+
+- Lazy repository file tree in the sidebar with Git status badges, dotfiles, ignore filtering, keyboard navigation, bounded paging and nested repository/submodule support.
+- Confined UTF-8 read-only file previews with virtual rendering, explicit return to the preceding diff/blame, refresh/cancellation and existing IDE/Explorer actions.
+
+- Visual Git Blame for worktree, staged and commit snapshots, with uncommitted-line handling, bounded virtual rendering, metadata/hash actions and graph navigation for commits outside the current history page.
+
+- Repository overview with persistent folder groups, bounded nested discovery, local status snapshots, search/filter/sort, IDE shortcuts and expandable groups in the repository selector. Existing recent and cloned repositories migrate into the registry.
+- Explicit remote refresh and serial group Pull all with fast-forward-only updates, per-repository results, skip reasons and cancellation. No automatic network polling or local-change cleanup.
+
+
+### Fixed
+
+- Canonicalize temporary roots in Windows clone, folder, Git-path, GCM, IDE and SSH test fixtures, preventing false CI failures when TEMP uses an 8.3 alias.
+- Verify combined dashboard-to-repository navigation and restoration of Blame after a read-only file preview; create focused smoke screenshot directories before writing captures.
+
+---
+
 ## [1.3.0] - 2026-11-06
 
 ### Added
@@ -195,6 +215,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.4.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.4.0
 [1.3.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.3.0
 [1.2.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.1
 [1.2.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.0
