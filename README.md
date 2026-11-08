@@ -9,12 +9,14 @@ A Git client for Windows with visual branch management, commit history and graph
 
 ## Download
 
-Current release: **1.4.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.4.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.5.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+
+Includes line/hunk staging and an editable Base/Ours/Theirs conflict view. Saving, staging and continuing an operation remain explicit, separate actions.
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.4.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.4.0/Branvix-Setup-1.4.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.4.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.4.0/Branvix-1.4.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.5.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.0/Branvix-Setup-1.5.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.5.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.0/Branvix-1.5.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
 
 ## Repository overview and folder groups
 
@@ -43,6 +45,24 @@ Folder badges summarize modified, untracked or conflicted descendants. Use arrow
 Selecting a file opens a **Read-only preview** inside Branvix. Text is never interpreted as HTML or executed. **Back to diff** restores the preceding diff/blame selection (or Close when there was none); IDE and File Explorer actions remain explicit alternatives. The preview supports regular UTF-8 text up to 1 MiB and 20,000 lines; binary/invalid text, oversized files, ignored paths, metadata and external links receive clear messages. Refresh rechecks the file and Cancel stops the owned request. Browsing/preview never stages or writes repository files.
 
 Lists load 200 entries per page, with a 2,000-entry scan cap per directory and a cooperative 5-second filesystem budget. Git commands have a 5-second timeout and 8 MiB output bound; status is briefly cached per Git root (2 seconds). Partial lists and unavailable Git status are labeled. The current tree retains at most 50 expansions/4,000 cached entries and renders at most 2,000 rows; collapse folders to free capacity. The preview renders a small window (normally 120 rows, at most 400 on tall screens). Filesystem calls already in progress can exceed the cooperative budget.
+
+### Stage individual lines or hunks
+
+Open a changed file's diff and choose **Select lines**. Check individual added/deleted lines or the checkbox on a hunk header, then **Stage selection**. On the staged side, **Unstage selection** reverses only the checked changes. Additions and deletions are independent: select both sides of a replacement, or its whole hunk, to move the complete replacement. If an isolated EOF change would alter an unselected line boundary, select the complete replacement/hunk. Native checkboxes support keyboard focus and Space; unified and side-by-side views share the selection.
+
+Only the index changes; working files and other staged changes stay intact. **Clear selection** clears the checkboxes; **Finish selection** restores the whole-file actions. **Refresh** reads a new snapshot. An index, HEAD or file change invalidates the old snapshot and requires selecting again. Failures never reset the entire index. App mutations are serialized per canonical working tree; a real Git index lock protects the temporary-index transaction. Finish an external Git operation before retrying a locked index.
+
+Regular UTF-8 text, CRLF/LF, missing final newlines, new/unborn files and deletions are supported within limits: 1 MiB per working file/diff, 5,000 diff rows, 32 MiB index, and 5 seconds per Git command. Empty files without textual hunks, binary/invalid text, symlinks/submodules, mode changes, configured clean filters/working-tree encodings and staged rename reversal require the whole-file action or an editor. Worktree content edits after a staged rename can still be selected. Truncated display diffs cannot be applied partially. Repository text stays inert, and historical/stash/preview views do not expose partial-write controls.
+
+### Visual merge conflict editor
+
+Open a conflicted file in **Changes** and choose **Resolve conflict**. Base, Ours and Theirs come from actual index stages 1/2/3; missing versions are labeled. Provenance shows the current checkout and incoming commit. During rebase, Ours is the rebased checkout and Theirs is the commit being replayed. Source tabs show 500 lines per page with changes against Base highlighted; oversized comparisons are labeled without preventing manual editing.
+
+Use **Previous/Next** to select a conflict and **Accept Ours/Theirs/both**, or edit the result directly. **Use entire version in result** also supports binary content and mixed line endings by preserving the chosen raw bytes. Choosing a missing Ours/Theirs explicitly deletes the file when saved, with confirmation; an absent Base cannot be chosen. Rename conflicts are handled per remaining index path. Text and script-like content stay inert.
+
+**Save result** (Ctrl+S) changes only the working file. **Mark resolved** stages the saved result only after conflict markers are removed. Continue merge/rebase/cherry-pick separately through the existing operation controls. Other staged files remain intact. Leaving a dirty editor, refreshing it, reloading, quitting or installing an update requires discarding confirmation. External file/index/reference changes reject stale writes and retain the draft; copy needed edits before explicitly refreshing and discarding it.
+
+Manual editing supports regular UTF-8 text with optional BOM and LF or CRLF, preserving the working file's format. Limits are 1 MiB per version/result, 20,000 lines for text editing/display, 32 MiB index and 5 seconds per Git command; filesystem calls can take longer. Source highlighting has bounded Git output and a 5,000-row cap; configured conflict-marker widths 1–64 are supported. Binary/invalid text, text exceeding the line cap and mixed-EOL results require a whole-version choice. Symlinks/junction paths, submodules, differing/nonregular modes, clean filters and working-tree encodings are unsupported; use an external editor/Git for those cases.
 
 ## Requirements
 
@@ -114,7 +134,7 @@ Separate messages explain authentication, denied access, unavailable repositorie
 
 ## Updates
 
-Verification limit for 1.4.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
+Verification limit for 1.5.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
 
 Both distributions check for stable updates after startup and every four hours. You can also use **Settings → Updates → Check for updates**.
 

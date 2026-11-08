@@ -7,6 +7,22 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.5.0] - 2026-11-08
+
+### Added
+
+- Visual merge conflict editor with actual Base/Ours/Theirs stages and operation provenance, paged source diffs, accept one/both, manual UTF-8 editing and explicit binary/deletion choices. Save, stage and operation continuation remain separate; stale writes retain the draft.
+- Unsaved conflict draft protection when navigating, refreshing, reloading, quitting or installing an update, with Italian/English guidance and keyboard controls.
+- Stage or unstage individual lines and hunks from working/staged file diffs, with keyboard-accessible selection in unified and side-by-side views, Italian/English guidance, refresh and stale-snapshot recovery.
+- Main-owned bounded snapshots and checked partial patches applied through a temporary index under the real Git lock, preserving worktree and unrelated staged content; explicit unsupported-file/encoding/limit handling.
+
+### Changed
+
+- Share the real-lock temporary-index transaction between selective staging and conflict resolution, preserving unrelated staged content and linked-worktree isolation.
+- Serialize managed Git mutations by canonical working tree, including group pulls, and wait for pending index transactions during quit/update cleanup.
+
+---
+
 ## [1.4.0] - 2026-11-07
 
 ### Added
@@ -215,6 +231,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.5.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.0
 [1.4.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.4.0
 [1.3.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.3.0
 [1.2.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.2.1
