@@ -9,20 +9,24 @@ A Git client for Windows with visual branch management, commit history and graph
 
 ## Download
 
-Current release: **1.5.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.5.1**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.1) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
 
-Includes line/hunk staging and an editable Base/Ours/Theirs conflict view. Saving, staging and continuing an operation remain explicit, separate actions.
+Includes HTTPS/Bitbucket Data Center authentication fixes, group creation from the welcome screen, clickable group filters, side-by-side Groups/Repositories panes and color-coded local upstream states. Line/hunk staging and an editable Base/Ours/Theirs conflict view remain included; saving, staging and continuing an operation stay explicit, separate actions.
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.5.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.0/Branvix-Setup-1.5.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.5.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.0/Branvix-1.5.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.5.1.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.1/Branvix-Setup-1.5.1.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.5.1-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.1/Branvix-1.5.1-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
 
 ## Repository overview and folder groups
 
 Open **Repositories** from the folder button in the top bar or the repository selector. The overview combines opened/cloned repositories and configured folder groups; adding or removing a group never changes folders on disk. Expand a group in the selector to open a nested repository. One repository remains active, and switching keeps the terminal confirmation.
 
-Use **Add folder** and **Scan repositories** to find repositories, including linked worktrees. Discovery does not follow symbolic links/junctions or enter `.git`. A scan is limited to 8 levels, 2,000 directories, 20,000 entries, 200 repositories and a cooperative 5-second budget; filesystem calls may take longer. A partial result is labeled: retry with a more specific folder. Missing folders/repositories remain recoverable through refresh.
+Use **Add group**, available on the welcome screen too, to select an ordinary folder and immediately discover its repositories without opening one. The folder itself need not be a Git repository. **Groups** and **Repositories** occupy side-by-side panes with independent scrolling. Click a group (or focus it and press Enter/Space) to filter its repositories; the Group dropdown stays synchronized, and **All** / **Registered** restore the broader lists.
+
+Use **Scan repositories** to repeat discovery, including linked worktrees. Discovery does not follow symbolic links/junctions or enter `.git`. A scan is limited to 8 levels, 2,000 directories, 20,000 entries, 200 repositories and a cooperative 5-second budget; filesystem calls may take longer. A partial result is labeled: retry with a more specific folder. Missing folders/repositories remain recoverable through refresh.
+
+**Local upstream** uses text and counts alongside color: green when aligned, amber for pending pull/push, red when diverged, and neutral without an upstream. These states compare local upstream references, so green does not imply the server has no newer commits; use **Refresh remote** to fetch first.
 
 Search by name/path/branch, filter changed or unavailable repositories, and sort by name, latest commit time or last opened. The list shows 100 repositories per page to keep rendering bounded. Migrated recent entries have no historical opening timestamp. Local snapshots refresh every 15 seconds while the overview is visible, with at most four concurrent snapshots, 5-second Git timeouts and a 10-second cache. Ahead/behind describes local upstream references; **Refresh remote** explicitly fetches for the selected repository. There is no periodic network access.
 
@@ -83,7 +87,7 @@ The Git installer has its own window and may request Windows administrator appro
 
 ## Getting started
 
-1. Launch Branvix and choose **Open repository…**.
+1. Launch Branvix and choose **Add group** to discover repositories inside an ordinary folder, or **Open repository…** to open one directly.
 2. Use **Changes** to review diffs, stage files and create commits.
 3. Manage branches, tags and stashes from the sidebar and context menus.
 4. Use **Sync**, **Push**, or the integrated PowerShell terminal for remote work.
@@ -130,11 +134,13 @@ Open **Settings → HTTPS authentication → Manage HTTPS** to see the detected 
 
 Select a remote and choose **Check access / retry**. This read-only check allows the configured helper to show its login UI when needed. Valid credentials are reused; Git/GCM handle rejected or expired credentials. Branvix does not clear credential stores, force a new login or switch accounts. Browser/token choices depend on the provider and helper version. GitHub, GitLab, Azure DevOps, Bitbucket and compatible servers use their configured helper flows; self-hosted servers may need provider-specific configuration. Branvix stores no tokens and offers no token form. A read check does not verify push permission.
 
-Separate messages explain authentication, denied access, unavailable repositories, rejected pushes, TLS and network errors. Use clean HTTPS URLs without username, password, query or fragment. Certificate verification is mandatory; existing CA and proxy configuration remains in effect. **Cancel operation** stops the owned Git/helper job; reload, crash, quit and update restart also clean it up. Unrelated browser processes are not closed; a provider tab may need closing manually. Network operations time out after 120 seconds including authentication.
+Separate messages explain authentication, denied access, unavailable repositories, rejected pushes, TLS and network errors. HTTPS URLs may include a username, such as `https://alice@bitbucket.company/scm/TEAM/repo.git`; passwords/tokens, query and fragment remain forbidden. Certificate verification is mandatory; existing CA and proxy configuration remains in effect. **Cancel operation** stops the owned Git/helper job; reload, crash, quit and update restart also clean it up. Unrelated browser processes are not closed; a provider tab may need closing manually. Network operations time out after 120 seconds including authentication.
+
+The remote selector lists **Fetch** and **Push** destinations separately, including multiple configured push URLs. **Check access / retry** reads the exact selected endpoint; changed configuration invalidates the old selection and requires refreshing the list. URL paths stay hidden and the renderer cannot supply an arbitrary test URL. Diverged branches, local changes that would be overwritten and missing upstream tracking have specific guidance; only safe fixed summaries cross the bridge, never arbitrary helper diagnostics. Recursive HTTPS clones also prepare the managed SSH identity/passphrase bridge for SSH submodules, while keeping the HTTPS helper active.
 
 ## Updates
 
-Verification limit for 1.5.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
+Verification limit for 1.5.1: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
 
 Both distributions check for stable updates after startup and every four hours. You can also use **Settings → Updates → Check for updates**.
 

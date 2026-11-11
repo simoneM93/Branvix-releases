@@ -7,6 +7,23 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.5.1] - 2026-11-11
+
+### Added
+
+- Add an ordinary folder as a repository group directly from the welcome screen, without opening a repository.
+- Show Groups and Repositories in side-by-side panes with independent scrolling; click or use the keyboard on a group to filter its repositories, with synchronized group selection and All/Registered shortcuts.
+- Distinguish local upstream states with text, counts and colors: aligned, pending pull, pending push, diverged and no upstream.
+
+### Fixed
+
+- Accept HTTPS repository URLs with a username alone, including Bitbucket Data Center clone URLs, while rejecting embedded passwords, query/fragment secrets and encoded control characters in usernames.
+- Report diverged branches, conflicting local changes and missing upstream tracking separately from HTTPS network/authentication failures, without exposing raw helper output.
+- List and check fetch/push HTTPS endpoints independently, including push-only HTTPS remotes and multiple push URLs; reject obsolete selections, preserve the choice across language changes and keep pre-job verification failures visible.
+- Preserve managed SSH identities/passphrase handling for SSH submodules during recursive HTTPS clones alongside interactive HTTPS authentication.
+
+---
+
 ## [1.5.0] - 2026-11-08
 
 ### Added
@@ -231,6 +248,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.5.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.1
 [1.5.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.0
 [1.4.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.4.0
 [1.3.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.3.0
