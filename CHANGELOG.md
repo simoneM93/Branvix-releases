@@ -7,6 +7,28 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.6.0] - 2026-11-14
+
+### Added
+
+- Optional file scanner in Settings → Security, off by default for fresh and legacy profiles. The saved opt-in controls manual scans and managed Commit/Amend/Continue checks; disabling cancels scans and reports while preserving rules/policy for re-enabling. Pending and failed saves retain consistent checkbox state, including closing rule settings during a save.
+- Settings sidebar with General, Notifications, Git, Editor, Authentication, Security and Updates tabs, keyboard navigation and preserved pending/error states. Existing specialized dialogs return to their originating tab/control; each new Settings opening starts on General.
+- Local staged security scanning engine with signature/credential/entropy and file checks, redacted findings, bounded worker-isolated custom regexes, snapshot revalidation and cancellation.
+- Manual staged security reports in Changes and Settings, with Critical-first severity, file/position, explicit incomplete coverage, pagination, staged/Amend diff navigation, file unstage and confirmed per-report ignores. Renderer-owned reports expire and invalidate on snapshot, repository, lifecycle or settings changes; unstage preserves worktree and unrelated staging, including rename pairs.
+- Atomic profile-owned scan settings and custom rule editing with worker syntax validation, cancellation, Italian/English guidance and both themes.
+- When enabled, shared security checks cover managed Commit/Amend/Commit and push, resolved merge commits and the currently staged cherry-pick/rebase Continue. Default Block requires explicit Critical correction/ignore; Warn and Warning findings require confirmation. Unscanned content requires separate acceptance; truncated findings cannot be overridden. Reviews bind the exact action/settings/snapshot, revalidate and are consumed once, including failed hooks. Cancellation/failure preserves the message and prevents the following push. Existing hooks remain active; automatic merge/replay commits, external Git races and hook changes after scanning remain explicit coverage limits.
+
+### Fixed
+
+- Remove the fixed Git deployment baseline and its startup/Settings warning. Recognized Git for Windows versions such as 2.55.0.windows.5 are accepted; missing, failed/timed-out and invalid-response checks remain. Installer checksum/signature validation is unchanged.
+- Acquire native focus and await completed Settings keyboard navigation before portable smoke assertions.
+- Terminate the owned PowerShell process tree before releasing the ConPTY session so child processes cannot survive terminal close, reload/crash or shutdown. Share concurrent cleanup, retain session ownership until completion and report cleanup errors without weakening smoke process checks.
+- Wait for renderer focus changes before exercising foreground/background update delivery in desktop smoke tests. Report failed fixtures to the parent runner over IPC so a stalled native shutdown is terminated promptly with the original nonzero status.
+- Restore the original workspace and remove the temporary Settings repository from recents before smoke-test cleanup. Align the canonical desktop smoke runner with the combined CI workload, retain failed exit codes and stop its process tree on timeout; bound terminal flood checks by both progress and total duration without reducing output volume.
+- Focus the first enabled menu control when actions such as Commit are unavailable, preserving keyboard access to other menu commands.
+
+---
+
 ## [1.5.1] - 2026-11-11
 
 ### Added
@@ -248,6 +270,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.6.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.0
 [1.5.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.1
 [1.5.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.0
 [1.4.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.4.0

@@ -7,16 +7,34 @@
 
 A Git client for Windows with visual branch management, commit history and graphs, staging, diffs, stash, tags, and an integrated PowerShell terminal.
 
+## Settings navigation
+
+Settings starts on **General**, with an internal sidebar for **Notifications**, **Git**, **Editor**, **Authentication**, **Security** and **Updates**. Use Up/Down or Home/End on the sidebar to switch sections. Values, pending saves and errors stay intact when switching. Specialized Git/editor/SSH/HTTPS/scanner dialogs return to the same section and control when closed. Close and Exit remain in the common footer. Each new opening starts on General; the selected section is not persisted. Available in 1.6.0 or later.
+
+## Staged security checks and reports
+
+The scanner is **off by default**. Enable **Settings → Security → Enable file scanner** to use manual staged-file scans and managed commit checks. With it off, manual scans are unavailable and Commit, Amend and Continue proceed without a security scan; Git validation and hooks still run normally. The preference is saved in the application profile. Existing profiles without this preference also start with it off, preserving their rules and policy. Disabling cancels pending scans and invalidates reports; re-enabling restores the saved configuration. Scan settings remain editable while the scanner is off.
+
+Use **Changes → Commit menu (▾) → Scan staged files**, select Commit, Amend (including the last commit) or Continue for a paused cherry-pick/rebase, then scan. Scanning remains available without a commit message; Commit actions stay disabled until the form is valid. Reports show Critical findings first, file and position with matched values hidden. Incomplete content and limits stay explicit. Scanning is local and does not change files or staging. **Open diff** deliberately opens the original file content, including values hidden in the report; Amend findings without new staging open the corresponding file in the previous commit.
+
+**Unstage file** removes the affected staged file (both paths for a rename) while preserving worktree and unrelated staged content. Repeat the scan after correcting staging. An unchanged file already in the last commit cannot be removed from Amend with Unstage alone. **Ignore finding** asks for confirmation and applies only to that finding/report, without authorizing a commit or approving unscanned content.
+
+Reports are memory-only and valid for five minutes. New scans, closing the report, switching repository, reload and settings changes invalidate them; actions reject a changed snapshot. Findings and ignores are not persisted or sent as native notifications. **Scan settings**, also available in Settings, saves local custom rules in the application profile; save to apply changes. Up to 20 expressions of 256 characters are supported, with syntax checks, timeout and cancellation. Do not enter real secrets as rule patterns; no configuration is read automatically from repositories.
+
+When the scanner is enabled, Commit, Amend, Commit and push, resolved merge Commit and the currently staged **Continue** of a paused cherry-pick/rebase check the candidate snapshot before Git starts. Default **Block** requires correcting or explicitly ignoring each Critical finding; Warning findings require confirmation. **Warn** allows a confirmed Critical attempt. Complete clean/Info-only reports proceed without warning confirmation. Unscanned content needs separate acceptance for that attempt; truncated findings cannot be overridden. Cancel or failure preserves the message and prevents the following push. Cancellation is available before Git starts; hooks and Git then run normally.
+
+Reviews are bound to repository, staged snapshot, HEAD, operation, message/context and settings, checked again and consumed once even if a hook fails. Retry requires a new review. Opening Diff cancels the pending review. Automatic merge/cherry-pick/rebase and later replay commits (including after Continue/Skip), terminal/IDE/external commits, and hook changes after scanning remain outside coverage; operation confirmations disclose automatic coverage limits. Hooks stay active. External Git can change state between the final check and Git taking its lock. Detection is heuristic and cannot guarantee the absence of secrets. Available in 1.6.0 or later.
+
 ## Download
 
-Current release: **1.5.1**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.1) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.6.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
 
-Includes HTTPS/Bitbucket Data Center authentication fixes, group creation from the welcome screen, clickable group filters, side-by-side Groups/Repositories panes and color-coded local upstream states. Line/hunk staging and an editable Base/Ours/Theirs conflict view remain included; saving, staging and continuing an operation stay explicit, separate actions.
+Includes local staged security reports and snapshot-bound checks before managed commits, plus a seven-section Settings sidebar. The coverage and hook/external-Git limits above apply. HTTPS/Bitbucket Data Center fixes, repository groups and local upstream states remain included, together with line/hunk staging and an editable Base/Ours/Theirs conflict view; saving, staging and continuing an operation stay explicit, separate actions.
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.5.1.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.1/Branvix-Setup-1.5.1.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.5.1-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.5.1/Branvix-1.5.1-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.6.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.0/Branvix-Setup-1.6.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.6.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.0/Branvix-1.6.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
 
 ## Repository overview and folder groups
 
@@ -70,7 +88,7 @@ Manual editing supports regular UTF-8 text with optional BOM and LF or CRLF, pre
 
 ## Requirements
 
-- Windows with Git for Windows available to Branvix. The app checks the supported Git version at startup.
+- Windows with Git for Windows available to Branvix. At startup the app checks whether Git runs and returns a recognized version. It warns if Git is missing, fails or returns an unrecognized response; there is no numeric minimum-version warning. Use a maintained Git release.
 - If Git is missing, choose **Install Git** to open the guided download and installation flow, or select an approved existing git.exe through Settings.
 - Node.js is included with the app and does not need to be installed separately.
 - Configure your usual Git authentication for remote operations, such as Git Credential Manager or SSH keys.
@@ -79,7 +97,7 @@ Branvix builds are currently unsigned. Windows may show a SmartScreen warning on
 
 ## Git setup
 
-**Settings → Git for Windows** shows Git's version and executable path. **Select git.exe…** saves a validated existing executable for Branvix and new terminal sessions without changing the Windows PATH. If the saved executable is moved, Branvix tries an available installation and lets you choose again.
+**Settings → Git** shows Git's version and executable path. **Select git.exe…** saves a validated existing executable for Branvix and new terminal sessions without changing the Windows PATH. If the saved executable is moved, Branvix tries an available installation and lets you choose again.
 
 **Set up Git…** downloads the stable installer from the official Git for Windows release with percentage and downloaded MB. Before installation, Branvix verifies the published SHA-256 and Windows signature against an approved certificate. Choose **Install Git** only after the package is verified. Downloads can be cancelled and retried; closing the dialog keeps the job available in Settings. Unverified direct-download packages are not run.
 
@@ -104,13 +122,15 @@ The dialog shows Git's available progress and lets you cancel. Public repositori
 
 The interface supports Italian and English, light and dark themes, and saved workspace preferences. **Ctrl+K** opens the command palette; **Ctrl+Backquote** opens the terminal.
 
+Terminating the terminal, switching repositories after confirmation, app closure, reload, or renderer crashes stop PowerShell and its descendant processes, including commands still starting. Hiding the terminal or keeping Branvix in the tray leaves them running. Terminal sessions are not restored between launches.
+
 Each workspace column scrolls independently, keeping its headers and controls visible. The detail panel's close button stays available while you scroll a diff. Changes keeps the commit controls reachable with the terminal open; the description editor adapts to the available height.
 
 Files inside new folders appear individually in Changes with their relative paths. You can inspect, stage, unstage or discard one file without affecting its siblings. Ignored files remain hidden, and nested Git repositories are not expanded into the parent repository's file list.
 
 ## Editors and IDEs
 
-Use the toolbar's **Open with…**, a file/recent-repository context menu, or **Settings → Editors and IDEs → Configure IDEs…**. Branvix detects Visual Studio, VS Code, Rider, WebStorm, IntelliJ IDEA and PyCharm in standard Windows locations, modern Toolbox locations, registered App Paths and executable launchers. Custom locations can be selected manually.
+Use the toolbar's **Open with…**, a file/recent-repository context menu, or **Settings → Editor → Configure IDEs…**. Branvix detects Visual Studio, VS Code, Rider, WebStorm, IntelliJ IDEA and PyCharm in standard Windows locations, modern Toolbox locations, registered App Paths and executable launchers. Custom locations can be selected manually.
 
 Automatic choice follows this order: repository preference, compatible detected IDE, global default, manual choice. Branvix recognizes solution/project and manifest filenames without running project code. Detection is limited to two subdirectory levels, 64 folders and 2000 entries; hidden/dependency/build folders and links are skipped. For multiple projects, choose a detected solution/project from the selector. IDE discovery is cached for 30 seconds.
 
@@ -120,7 +140,7 @@ Repository opens use the appropriate solution/project or folder, while file open
 
 ## SSH authentication
 
-**Settings → SSH authentication → Configure SSH…** shows the OpenSSH client, agent status and public fingerprints for existing Ed25519, RSA and ECDSA keys. A readable paired `.pub` file is required; **Select existing key…** supports other locations. Save a repository identity or a global fallback, or select **Existing configuration and agent** and save to remove the preference. Branvix stores path references only, never private key contents or passphrases. The selected identity is added to configured identities; existing agents stay active. Inventory is bounded to 200 entries, with up to 20 manually selected paths.
+**Settings → Authentication → Configure SSH…** shows the OpenSSH client, agent status and public fingerprints for existing Ed25519, RSA and ECDSA keys. A readable paired `.pub` file is required; **Select existing key…** supports other locations. Save a repository identity or a global fallback, or select **Existing configuration and agent** and save to remove the preference. Branvix stores path references only, never private key contents or passphrases. The selected identity is added to configured identities; existing agents stay active. Inventory is bounded to 200 entries, with up to 20 manually selected paths.
 
 Managed OpenSSH requests encrypted-key passphrases in a protected dialog with show/hide, retry and cancel. The passphrase is transient and is not placed in command arguments, settings, logs or Credential Manager. Cancel stops Git and its child processes; reload, crash, quit and update restart also clean up authentication. The operation timeout is 120 seconds, including prompt time. Installer and portable use the same flow.
 
@@ -130,7 +150,7 @@ Host verification stays mandatory. Verify an unknown fingerprint independently b
 
 ## HTTPS authentication
 
-Open **Settings → HTTPS authentication → Manage HTTPS** to see the detected Git Credential Manager version, configured helper types/scopes and HTTPS remotes. Custom helper commands and URL paths stay hidden. Git determines the effective helper chain, including scope-specific entries and resets; Branvix never rewrites it. If GCM is not detected, public access and other configured helpers remain available.
+Open **Settings → Authentication → Manage HTTPS** to see the detected Git Credential Manager version, configured helper types/scopes and HTTPS remotes. Custom helper commands and URL paths stay hidden. Git determines the effective helper chain, including scope-specific entries and resets; Branvix never rewrites it. If GCM is not detected, public access and other configured helpers remain available.
 
 Select a remote and choose **Check access / retry**. This read-only check allows the configured helper to show its login UI when needed. Valid credentials are reused; Git/GCM handle rejected or expired credentials. Branvix does not clear credential stores, force a new login or switch accounts. Browser/token choices depend on the provider and helper version. GitHub, GitLab, Azure DevOps, Bitbucket and compatible servers use their configured helper flows; self-hosted servers may need provider-specific configuration. Branvix stores no tokens and offers no token form. A read check does not verify push permission.
 
@@ -140,7 +160,7 @@ The remote selector lists **Fetch** and **Push** destinations separately, includ
 
 ## Updates
 
-Verification limit for 1.5.1: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
+Verification limit for 1.6.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
 
 Both distributions check for stable updates after startup and every four hours. You can also use **Settings → Updates → Check for updates**.
 
@@ -164,13 +184,13 @@ The status bar shows the request in progress. Missing/unverified/outdated CLI or
 
 ## System tray and background mode
 
-Branvix has a Windows system tray icon with **Open Branvix** and **Exit**. In **Settings → System tray**, enable **Keep Branvix running in the background when closing the window** to hide the window instead of quitting. This is off by default and saved across launches. Click the tray icon or choose **Open Branvix** to return. An active terminal keeps running while the window is hidden.
+Branvix has a Windows system tray icon with **Open Branvix** and **Exit**. In **Settings → General → System tray**, enable **Keep Branvix running in the background when closing the window** to hide the window instead of quitting. This is off by default and saved across launches. Click the tray icon or choose **Open Branvix** to return. An active terminal keeps running while the window is hidden.
 
 Choose **Exit** from the tray or Settings to quit. Branvix asks before stopping an active terminal or managed operation. Installer update **Restart** still closes Branvix and installs the update; portable updates remain manual.
 
 ## Windows notifications
 
-In **Settings → Windows notifications**, choose updates, completed operations and failed operations independently. All three categories are enabled by default and saved in the application profile. Toasts are silent and only sent while Branvix is in the background, including when hidden in the tray. Supported managed operations are clone, fetch, pull, push, sync and tag push; commands typed in the terminal are not monitored. Cancelling an operation does not produce an error notification.
+In **Settings → Notifications**, choose updates, completed operations and failed operations independently. All three categories are enabled by default and saved in the application profile. Toasts are silent and only sent while Branvix is in the background, including when hidden in the tray. Supported managed operations are clone, fetch, pull, push, sync and tag push; commands typed in the terminal are not monitored. Cancelling an operation does not produce an error notification.
 
 Clicking a toast restores Branvix; it never opens a repository URL or starts an update. Notifications contain only the operation name or release version, without repository paths, URLs, credentials or Git diagnostics. Update availability, download and ready states share one notification per version, with receipts preserved across restarts. Events suppressed in the foreground or with a category disabled are not replayed. The in-app bell, update status and operation messages remain available.
 
