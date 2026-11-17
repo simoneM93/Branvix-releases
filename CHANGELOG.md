@@ -7,6 +7,32 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.6.1] - 2026-11-17
+
+### Added
+
+- **More actions (…) → Open on <Provider>** opens the repository home page for remotes on GitHub, GitLab.com, Bitbucket Cloud, Azure DevOps and Bitbucket Data Center (HTTPS `/scm/` or SSH port 7999). Unknown hosts are not listed; the main process builds an `https://` page from the remote without credentials.
+- Closing the window (X, Alt+F4, taskbar) asks whether to keep Branvix in background or exit, with Cancel/Esc and an unchecked **Remember my choice**. Settings → General → System tray becomes a three-way choice (Ask every time, default / Keep running in background / Exit). Profiles with background mode enabled keep it; others ask. Without a tray icon or a ready interface, closing exits as before.
+- Diffs highlight the changed words of paired deleted/added lines (one span per line; lines over 1,000 characters are not highlighted).
+
+### Changed
+
+- Dark theme surfaces now have distinct title bar, sidebar, panel and hover levels; input strokes, primary buttons, accent text, error text and remote-ref color reach WCAG AA. Contrast tests now cover the dark theme and require identical automatic and forced dark values.
+- Windows 1000px wide or narrower fold the sidebar to its rail while a detail is open, without changing the saved preference. Inactive tabs show only icon and count in narrow center columns; the staging header, amend option and detail actions no longer clip or wrap awkwardly.
+- Title bar actions are grouped with separators. The repository overview uses a distinct grid icon, and Show in File Explorer plus the theme choice moved to a **More actions (…)** menu; the theme remains in Settings.
+- The status bar shows the current branch upstream with ahead/behind counts instead of the copyright, which now appears on the welcome screen and next to the version in Settings → Updates. Successful operations are reported only in the status bar, no longer duplicated as a toast; errors keep both. Status text is cleared when the language changes instead of staying in the previous language.
+- Font sizes follow a five-step token scale (11/12/13/15/20 px); nothing renders below 11 px. Diff line numbers are no longer dimmed and use full text color on added/removed lines for AA contrast.
+- Welcome screen actions use a balanced layout: **Add group** on its own full-width row, **Open repository** and **Clone repository** sharing the next row with equal widths (single column in very narrow cards), instead of an uneven wrap in Italian.
+- Corner radii follow tokens (`--radius-lg/--radius/--radius-sm/--radius-xs`); dialogs now share the welcome card radius. The Italian tray option reads "Resta attivo in background".
+- Diffs use lighter line tints in the dark theme and a narrower line-number gutter.
+
+### Fixed
+
+- Enter in the text field of the generic text, new branch and new tag dialogs no longer cancels (the untyped Cancel button was the form default). Enter now runs each dialog's primary action, Cancel for destructive confirmations, unless another button was reached with the keyboard; multi-line fields, select lists and the command palette keep their own Enter.
+- HTTPS flow test fixture finds Git for Windows `openssl.exe` whether `where git` returns `cmd\git.exe` or `mingw64\bin\git.exe` first, and ignores a user `OPENSSL_CONF` from other toolchains.
+
+---
+
 ## [1.6.0] - 2026-11-14
 
 ### Added
@@ -270,6 +296,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.6.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.1
 [1.6.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.0
 [1.5.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.1
 [1.5.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.0

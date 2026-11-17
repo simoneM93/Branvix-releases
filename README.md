@@ -27,14 +27,14 @@ Reviews are bound to repository, staged snapshot, HEAD, operation, message/conte
 
 ## Download
 
-Current release: **1.6.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.6.1**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.1) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
 
 Includes local staged security reports and snapshot-bound checks before managed commits, plus a seven-section Settings sidebar. The coverage and hook/external-Git limits above apply. HTTPS/Bitbucket Data Center fixes, repository groups and local upstream states remain included, together with line/hunk staging and an editable Base/Ours/Theirs conflict view; saving, staging and continuing an operation stay explicit, separate actions.
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.6.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.0/Branvix-Setup-1.6.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.6.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.0/Branvix-1.6.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.6.1.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.1/Branvix-Setup-1.6.1.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.6.1-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.1/Branvix-1.6.1-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
 
 ## Repository overview and folder groups
 
@@ -120,11 +120,11 @@ Use Branvix's custom folder picker to select or create a parent folder. It accep
 
 The dialog shows Git's available progress and lets you cancel. Public repositories work without credentials; private HTTPS/SSH repositories use your configured Git Credential Manager or OpenSSH setup. After cloning, the repository appears in recents; open it in Branvix or your preferred IDE. A failed or cancelled clone may leave partial files at the displayed destination when safe cleanup is uncertain. Inspect or remove that folder before retrying. Installer and portable builds use the same flow.
 
-The interface supports Italian and English, light and dark themes, and saved workspace preferences. **Ctrl+K** opens the command palette; **Ctrl+Backquote** opens the terminal.
+The interface supports Italian and English, light and dark themes (title bar **More actions (…)** menu or Settings), and saved workspace preferences. **Ctrl+K** opens the command palette; **Ctrl+Backquote** opens the terminal. The title bar **More actions (…)** menu offers **Open on <Provider>** for remotes hosted on GitHub, GitLab.com, Bitbucket Cloud, Azure DevOps or Bitbucket Data Center (recognized by an HTTPS `/scm/` path or SSH port 7999; its web address is assumed to be on the same host). It opens the repository home page in your browser. The current branch's remote comes first, then `origin`; with several recognized remotes each appears with its name. Remotes on other hosts are not listed, so no guessed address is opened. Only `https://` pages are opened, never credentials. In dialogs, **Enter** runs the highlighted action (Cancel for destructive confirmations) unless you moved to another button with the keyboard.
 
 Terminating the terminal, switching repositories after confirmation, app closure, reload, or renderer crashes stop PowerShell and its descendant processes, including commands still starting. Hiding the terminal or keeping Branvix in the tray leaves them running. Terminal sessions are not restored between launches.
 
-Each workspace column scrolls independently, keeping its headers and controls visible. The detail panel's close button stays available while you scroll a diff. Changes keeps the commit controls reachable with the terminal open; the description editor adapts to the available height.
+Each workspace column scrolls independently, keeping its headers and controls visible. The detail panel's close button stays available while you scroll a diff. Changes keeps the commit controls reachable with the terminal open; the description editor adapts to the available height. In windows 1000px wide or narrower, opening a detail folds the sidebar to its icon rail until the detail closes; your saved sidebar preference is unchanged. Diffs highlight the changed words when a deleted line is replaced by an added one. The status bar shows the current upstream with ahead/behind counts; successful operations are reported there, while errors also show a toast.
 
 Files inside new folders appear individually in Changes with their relative paths. You can inspect, stage, unstage or discard one file without affecting its siblings. Ignored files remain hidden, and nested Git repositories are not expanded into the parent repository's file list.
 
@@ -160,7 +160,7 @@ The remote selector lists **Fetch** and **Push** destinations separately, includ
 
 ## Updates
 
-Verification limit for 1.6.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
+Verification limit for 1.6.1: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
 
 Both distributions check for stable updates after startup and every four hours. You can also use **Settings → Updates → Check for updates**.
 
@@ -168,7 +168,7 @@ Both distributions check for stable updates after startup and every four hours. 
 - A dismissible banner appears once per version and closes after ten seconds, pausing while hovered or focused.
 - The status-bar action remains available after closing the banner.
 
-**Installer:** updates download in the background, showing the real percentage when available in notifications, the banner, status bar and Settings. Choose **Restart** once the download is verified: Branvix closes, the installer shows its progress, and the updated app reopens automatically when installation finishes. Branvix asks before interrupting an active terminal, including a hidden one; cancelling keeps it running. Windows may request installation permission. Downloaded updates also install on an actual normal exit, without forcing Branvix to reopen. With background mode enabled, **X** only hides the window and defers installation; use **Exit** from the tray or Settings to quit. **Restart** exits and requests installation/reopening even when background mode is enabled.
+**Installer:** updates download in the background, showing the real percentage when available in notifications, the banner, status bar and Settings. Choose **Restart** once the download is verified: Branvix closes, the installer shows its progress, and the updated app reopens automatically when installation finishes. Branvix asks before interrupting an active terminal, including a hidden one; cancelling keeps it running. Windows may request installation permission. Downloaded updates also install on an actual normal exit, without forcing Branvix to reopen. When **X** keeps Branvix in background, it only hides the window and defers installation; use **Exit** from the tray or Settings to quit. **Restart** exits and requests installation/reopening even when background mode is enabled.
 
 **Portable:** choose **Download portable** to open the official release page, download the new portable executable, close Branvix and replace the old executable manually.
 
@@ -184,9 +184,9 @@ The status bar shows the request in progress. Missing/unverified/outdated CLI or
 
 ## System tray and background mode
 
-Branvix has a Windows system tray icon with **Open Branvix** and **Exit**. In **Settings → General → System tray**, enable **Keep Branvix running in the background when closing the window** to hide the window instead of quitting. This is off by default and saved across launches. Click the tray icon or choose **Open Branvix** to return. An active terminal keeps running while the window is hidden.
+Branvix has a Windows system tray icon with **Open Branvix** and **Exit**. In **Settings → General → System tray**, choose what closing the window does: **Ask every time** (default), **Keep running in background** or **Exit**. When asking, a dialog offers **Keep in background**, **Exit** or **Cancel**; tick **Remember my choice** (unchecked by default) to save it. The choice is saved across launches; if you had enabled background mode before, it stays enabled. Click the tray icon or choose **Open Branvix** to return. An active terminal keeps running while the window is hidden.
 
-Choose **Exit** from the tray or Settings to quit. Branvix asks before stopping an active terminal or managed operation. Installer update **Restart** still closes Branvix and installs the update; portable updates remain manual.
+Choose **Exit** from the tray or Settings to quit without the close dialog. Branvix asks before stopping an active terminal or managed operation. Installer update **Restart** still closes Branvix and installs the update; portable updates remain manual.
 
 ## Windows notifications
 
