@@ -7,6 +7,55 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+## [1.7.0] - 2026-11-24
+
+### Added
+
+- Add reversible diff expansion using the existing panel, including with the terminal, preview, Blame and conflicts. Restore the original columns on close or repository switch without changing saved layout preferences; enable side-by-side from the real 620 px panel width and preserve dirty-conflict exit guards.
+
+### Changed
+
+- Buttons, tabs, rows, menu items and fields change color with a short 120 ms transition and menus fade in, instead of switching abruptly; with Windows "Show animations" off (reduced motion) all transitions are disabled.
+- Word-level diff highlights apply only to paired lines that share at least 40% of the longer line; replaced lines with little in common are no longer highlighted almost entirely. The **Side by side** toggle is hidden in panels too narrow for it instead of being shown dimmed.
+- The Stash section follows the branch list instead of sitting at the bottom of a mostly empty sidebar. Graph lanes are slightly wider and commit dots larger.
+
+### Fixed
+
+- Staging a renamed file that was edited after `git mv` (checkbox, **Stage all** or the detail **Stage** button) no longer fails with `pathspec … did not match any files`: staging sends only the new path, while unstaging still restores both sides of the rename.
+- A branch with the same name as a tag (for example `v1`) is listed by its real name instead of `heads/v1`, and checkout, rename, delete, merge, rebase and new branches from it use the branch rather than the tag. The upstream is shown without the `remotes/` prefix in the same situation.
+- Local Git operations that run hooks or filters (commit, amend, merge, rebase, cherry-pick, Continue/Skip/Abort, checkout, stash, stage, discard) may run up to 10 minutes instead of being stopped after 30 seconds, so slow pre-commit hooks or LFS filters complete. When the limit is reached the error explains it as a Git timeout (hooks, Continue/Abort) instead of a network timeout, and Commit no longer hides it behind a generic commit failure.
+- **Load more** in History/Graph ignores a page that arrives after a repository switch, a refresh or another Load more, so commits from another repository or duplicate commits are no longer appended. The folder picker ignores a slow listing once you have opened another folder, and closing the repository overview while it is loading no longer leaves its 15-second status timer running.
+- The staged file scanner no longer blocks commits that stage `package-lock.json`, other lockfiles, minified bundles or base64 assets: high-entropy checks skip lockfiles, `*.min.js`/`*.min.css`/`*.map`, integrity hashes and `base64,` data, and stop after 10 strings per file instead of truncating the report (truncated reports cannot be overridden). Token/private-key signatures and credential assignments still apply to these files.
+- The staged file scanner detects credentials whose name contains a keyword (`DB_PASSWORD`, `SECRET_KEY`, `GITHUB_TOKEN`, `AWS_SECRET_ACCESS_KEY`, `authToken`, `apiKey`) without flagging words such as `tokenizer` or `secretary`; PGP, SSH2 and PuTTY private keys; Stripe live, Google API, `sk-` AI service and npm tokens; and `.pem`, `.ppk`, `.jks`, `.keystore`, `.kdbx` and Terraform state files.
+- Large staged sets near the 16 MiB scan limit no longer fail with a scanner timeout on slower machines: the worker deadline grows with the scanned size (2 s plus 250 ms per MiB, at most 8 s), and line positions are computed once per file instead of once per finding.
+- A repository registry (`repositories.json`) or IDE preferences file (`ides.json`) that is temporarily locked or denied at startup (for example by antivirus or indexing) is no longer overwritten with empty data on the next save, which lost groups and custom IDEs. The save is refused with a retry message and the file is read again on the next attempt; only a missing file starts empty. Selecting a Git executable no longer leaves a temporary file behind if writing its setting fails.
+- Exiting is more robust: while Branvix shuts down (or asks about an unsaved conflict draft) the window X no longer closes the window underneath it, and cancelling the exit restores the window instead of failing on a closed one. A reload, crash or closed window while the conflict-draft check runs no longer blocks every later exit, and a background update-check error during shutdown no longer re-enables editing or asks about the draft again.
+- Cloning over SSH into a folder that is inside another repository no longer picks up that repository's `core.sshCommand`, which turned off the identity chosen in Branvix and the passphrase prompt; clones read the setting only from global and system Git configuration.
+- Every IPC channel, including the folder picker and theme sync, now applies the same sender check (application page, main frame, owning window). The Git executable and folder pickers cannot be opened twice at once, so a second selection no longer fails after a file was already chosen.
+- Searching a hash prefix no longer returns the tip of a branch or tag whose name looks like hex (for example `dead` or `cafe`): only commits whose hash starts with the text match, and several commits sharing a short prefix are all listed. With `log.showSignature` enabled, commit details no longer prepend signature verification output to the message.
+- The Italian interface no longer shows English labels for the Commit button and menu item, the detail Stage/Unstage button, file checkbox screen-reader labels and the status messages of staging and stash creation. Panel splitters finish a resize (saving the size and leaving resize mode) also when the drag is interrupted instead of released.
+- In the stacked layout below 760 px (reachable with a narrower minimum or display zoom), the sidebar scrolls as a whole instead of overlapping its search, filters and stash sections, and the title bar no longer causes horizontal page scroll: repository and branch names shrink with an ellipsis, separators are hidden, and Refresh and the repository overview stay available from the command palette and the repository menu.
+- The repository overview fits narrower windows: the repository table no longer scrolls horizontally (names wrap, paths ellipsize, actions keep their width), group actions sit in an aligned two-column grid, the group selector widens and shows the full name as a tooltip, and opening the overview no longer draws a focus ring across its title.
+- Conflict editor: Back, Refresh, Save result and Mark resolved form a balanced 2×2 grid in narrow panels (one row when wide) instead of leaving one button alone; conflict navigation and Accept buttons are hidden when the result has no markers instead of showing "Conflict 0 / 0". Disabled buttons are easier to read across the app. The Ctrl+Enter hint next to Commit is hidden in narrow panels instead of being cut off.
+- The commit graph shows branch and tag labels after the message, as History does, so messages line up. Notifications appear at the bottom left above the status bar instead of over the diff panel.
+- With the Automatic theme, the terminal follows a Windows light/dark switch even when the page's color-scheme change event is not delivered; it could keep the previous colors.
+- Author avatar colors keep white initials at WCAG AA contrast (4.5:1) for every author: yellow and green hues are darkened as needed instead of dropping to about 2.6:1.
+- Make File Explorer in the read-only preview select the previewed file through the existing reveal action, preserving the separate repository-root command. Missing or moved targets report an error without changing preview/repository; scripts and executables are selected rather than run.
+- Keep diff read failures in the selected detail with local retry/cancel feedback, preserving the last valid content and disabling stale write actions. Distinguish verified clean files from errors, ignore superseded reads and preserve unchanged DOM, reading position and focus; revalidate partial selections by token. Preview and Blame retain valid content with explicit stale/loading/error/cancellation feedback.
+- Coordinate History/Graph pagination by repository, refresh generation and a pre/post Git-ref fingerprint. Ignore obsolete pages, share loading/retry feedback, preserve loaded depth on unchanged-ref refreshes (including hidden terminal timers), and explicitly realign after ref changes instead of mixing offsets.
+- Preserve commit-row focus and reading position across renders; support repeated arrow-key navigation in both History and Graph. Keep the bounded Blame ancestry graph focused through refreshes until explicit reset or a repository switch.
+- Bind stash Apply/Pop/Drop and diff requests to the selected index and full object hash, rejecting obsolete selections and refreshing the list instead of operating on a shifted stash. Diff reads use the immutable object; preview return preserves its identity, with recoverable Italian/English guidance.
+- Serialize app-owned stash mutations across linked worktrees. Pop applies by object identity and rechecks before removal; conflicts preserve the stash, and a successful application with unconfirmed removal is reported explicitly to prevent accidental reapplication. Native Git Drop retains its external-process race limit.
+- Publish a repository switch only after all repository reads and confirmations succeed. Failed/cancelled openings preserve the previous workspace, selection and commit draft; reopening the same repository preserves them too. Confirm before discarding a draft on a successful switch, and update recents only after success.
+- Bind asynchronous Amend messages to their repository, commit, mode and request, preserving edits made during loading. Show the target hash and an explicit Exit Amend action; block submission while loading or after HEAD changes without discarding edited text.
+- Check the expected HEAD in the backend before a UI Amend, including with the optional security scanner disabled. Existing commit reviews, snapshot invalidation, hooks and external Git race limitations remain.
+
+### Security
+
+- Release and CI workflows pin their GitHub Actions to full commit SHAs, no longer keep Git credentials in the source checkout, run one release at a time and run the desktop smoke test before publishing, reducing the exposure of the token that publishes updates.
+
+---
+
 ## [1.6.1] - 2026-11-17
 
 ### Added
@@ -296,6 +345,7 @@ and version numbers follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ---
 
+[1.7.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.7.0
 [1.6.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.1
 [1.6.0]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.0
 [1.5.1]: https://github.com/simoneM93/Branvix-releases/releases/tag/v1.5.1

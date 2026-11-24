@@ -7,6 +7,30 @@
 
 A Git client for Windows with visual branch management, commit history and graphs, staging, diffs, stash, tags, and an integrated PowerShell terminal.
 
+## Repository switching and Amend
+
+Switching repositories loads all required data before replacing the current workspace or stopping its terminal. A failed or cancelled opening keeps the previous repository, selection and commit draft; reopening the same repository preserves them too. A successful switch to another repository asks before discarding a nonempty draft or Amend mode, then clears the composer. Drafts are not saved to disk.
+
+**Amend last commit** shows its target hash. **Exit Amend** restores the draft written before entering the mode. Late message loads cannot replace edited text or another repository's draft. Commit is disabled during loading. If HEAD changes, the edited message remains visible and sending is blocked until you exit Amend. The backend checks the expected HEAD before a UI Amend even with the scanner disabled; external Git can still race after that check. Existing restrictions for unborn repositories, operations in progress and published commits remain. Available in 1.7.0 or later.
+
+## History navigation and refresh
+
+History and Graph load 300 commits per page and share progress, errors and a retry button. Refreshes preserve loaded pages, selection, reading position and keyboard focus while Git references remain unchanged, including refreshes from a hidden terminal. Use Enter/Space to open a commit and Up/Down to navigate either list. A page requested for an old repository or refresh cannot enter the current history.
+
+When references change, an explicit message explains that history has restarted from the latest page; load more commits to continue. Ref checks prevent mixing incompatible pages, but are not an atomic snapshot against external Git changes that are immediately reverted or shallow/graft changes without ref movement. The ancestry graph opened from Blame remains focused until **Full history** or a repository switch; **Full history** returns to the loaded normal history. Available in 1.7.0 or later.
+
+## Diff review and recovery
+
+**Expand diff** gives the existing detail panel the workspace width while retaining the terminal. **Restore layout**, closing the detail or successfully switching repositories restores the original columns and saved widths. Preview, Blame and conflicts share the panel; cancelling a dirty-conflict exit preserves the draft and expanded layout. Side-by-side uses the actual panel width (at least 620 px).
+
+Read errors retain the selected diff and its last valid content with **Retry**. Retained content is marked as potentially out of date and write actions remain disabled until revalidated. **Cancel** ignores an obsolete diff update; an already running read-only Git command may finish within its normal timeout. A verified no-changes result closes a working-file detail, while tracked deletions remain reviewable. Unchanged content preserves reading position and focus; partial selections are kept only with an identical verified token. Preview and Blame retain valid content with explicit refresh/error/cancellation guidance. Available in 1.7.0 or later.
+
+## Stash selection safety
+
+Apply, Pop, Drop and diff stay tied to the selected stash. If its position or identity changes after an external push/drop, the request is rejected and the list refreshed; select the intended stash again before retrying. Returning from a file preview preserves the stash identity and refuses an obsolete selection.
+
+Pop applies the selected content before rechecking and removing the entry. Conflicts keep the stash. If application succeeds but removal is not confirmed, inspect the refreshed list and worktree instead of applying it again. App-owned stash mutations are serialized across linked worktrees; external Git can still race the final Drop check, so avoid concurrent external stash changes during deletion. Available in 1.7.0 or later.
+
 ## Settings navigation
 
 Settings starts on **General**, with an internal sidebar for **Notifications**, **Git**, **Editor**, **Authentication**, **Security** and **Updates**. Use Up/Down or Home/End on the sidebar to switch sections. Values, pending saves and errors stay intact when switching. Specialized Git/editor/SSH/HTTPS/scanner dialogs return to the same section and control when closed. Close and Exit remain in the common footer. Each new opening starts on General; the selected section is not persisted. Available in 1.6.0 or later.
@@ -27,14 +51,14 @@ Reviews are bound to repository, staged snapshot, HEAD, operation, message/conte
 
 ## Download
 
-Current release: **1.6.1**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.6.1) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
+Current release: **1.7.0**. See the [release notes](https://github.com/simoneM93/Branvix-releases/releases/tag/v1.7.0) or [all releases](https://github.com/simoneM93/Branvix-releases/releases).
 
 Includes local staged security reports and snapshot-bound checks before managed commits, plus a seven-section Settings sidebar. The coverage and hook/external-Git limits above apply. HTTPS/Bitbucket Data Center fixes, repository groups and local upstream states remain included, together with line/hunk staging and an editable Base/Ours/Theirs conflict view; saving, staging and continuing an operation stay explicit, separate actions.
 
 | Distribution | Download | Installation |
 | --- | --- | --- |
-| Installer | [Branvix-Setup-1.6.1.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.1/Branvix-Setup-1.6.1.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
-| Portable | [Branvix-1.6.1-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.6.1/Branvix-1.6.1-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
+| Installer | [Branvix-Setup-1.7.0.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.7.0/Branvix-Setup-1.7.0.exe) | Run the setup wizard; includes shortcuts, uninstall support and integrated updates. |
+| Portable | [Branvix-1.7.0-portable.exe](https://github.com/simoneM93/Branvix-releases/releases/download/v1.7.0/Branvix-1.7.0-portable.exe) | Run without installation. Extraction on each launch can make startup slower. |
 
 ## Repository overview and folder groups
 
@@ -65,6 +89,8 @@ Select **Files** in the sidebar, or its icon on the collapsed rail, to browse th
 Folder badges summarize modified, untracked or conflicted descendants. Use arrow keys to move/expand/collapse, Home/End to reach the first/last visible row, and Enter/Space to open a file or load more entries. The Branches/Files tabs support Left/Right. **Refresh** reloads expanded folders; repository refreshes and returning to the app pick up external file changes. A repository switch cancels obsolete work and resets tree memory.
 
 Selecting a file opens a **Read-only preview** inside Branvix. Text is never interpreted as HTML or executed. **Back to diff** restores the preceding diff/blame selection (or Close when there was none); IDE and File Explorer actions remain explicit alternatives. The preview supports regular UTF-8 text up to 1 MiB and 20,000 lines; binary/invalid text, oversized files, ignored paths, metadata and external links receive clear messages. Refresh rechecks the file and Cancel stops the owned request. Browsing/preview never stages or writes repository files.
+
+From 1.7.0, **File Explorer** in a preview selects the previewed file, including nested paths with spaces or Unicode; it does not run scripts or executables through file associations. The separate project-folder command still opens the repository root. If the file has moved or disappeared, an error is reported while the preview and active repository remain selected.
 
 Lists load 200 entries per page, with a 2,000-entry scan cap per directory and a cooperative 5-second filesystem budget. Git commands have a 5-second timeout and 8 MiB output bound; status is briefly cached per Git root (2 seconds). Partial lists and unavailable Git status are labeled. The current tree retains at most 50 expansions/4,000 cached entries and renders at most 2,000 rows; collapse folders to free capacity. The preview renders a small window (normally 120 rows, at most 400 on tall screens). Filesystem calls already in progress can exceed the cooperative budget.
 
@@ -160,7 +186,7 @@ The remote selector lists **Fetch** and **Push** destinations separately, includ
 
 ## Updates
 
-Verification limit for 1.6.1: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
+Verification limit for 1.7.0: the installed A→B upgrade, automatic reopening and preservation of preferences still await isolated Windows acceptance. Local downloader and smoke checks do not verify that transition. Clean Windows/NSIS and real provider/OS acceptance remain separate from local preparation.
 
 Both distributions check for stable updates after startup and every four hours. You can also use **Settings → Updates → Check for updates**.
 
